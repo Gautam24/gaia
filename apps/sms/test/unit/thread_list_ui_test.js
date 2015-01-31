@@ -588,7 +588,7 @@ suite('thread_list_ui', function() {
     });
   });
 
-  suite('markReadUnread', function() {
+  suite('markReadUnreadUI', function() {
     setup(function() {
       var threads = [{
         id: 1,
@@ -625,6 +625,7 @@ suite('thread_list_ui', function() {
         ThreadListUI.appendThread(thread);
       });
 
+      this.sinon.spy(ThreadListUI, 'markReadUnread');
       ThreadListUI.selectionHandler = null;
       ThreadListUI.startEdit();
     });
@@ -636,10 +637,11 @@ suite('thread_list_ui', function() {
       ThreadListUI.selectionHandler.selected = new Set(['1', '2']);
 
       ThreadListUI.checkInputs();
-      ThreadListUI.markReadUnread();
+      ThreadListUI.markReadUnreadUI();
 
       assert.isFalse(firstThreadNode.classList.contains('unread'));
       assert.isFalse(secondThreadNode.classList.contains('unread'));
+      sinon.assert.calledWith(ThreadListUI.markReadUnread, [1, 2], true);
     });
 
     test('both Threads are unread', function() {
@@ -649,10 +651,11 @@ suite('thread_list_ui', function() {
       ThreadListUI.selectionHandler.selected = new Set(['3', '4']);
 
       ThreadListUI.checkInputs();
-      ThreadListUI.markReadUnread();
+      ThreadListUI.markReadUnreadUI();
 
       assert.isFalse(firstThreadNode.classList.contains('unread'));
       assert.isFalse(secondThreadNode.classList.contains('unread'));
+      sinon.assert.calledWith(ThreadListUI.markReadUnread, [3, 4], true);
     });
 
     test('both Threads are read', function() {
@@ -662,10 +665,11 @@ suite('thread_list_ui', function() {
       ThreadListUI.selectionHandler.selected = new Set(['5', '6']);
 
       ThreadListUI.checkInputs();
-      ThreadListUI.markReadUnread();
+      ThreadListUI.markReadUnreadUI();
 
       assert.isTrue(firstThreadNode.classList.contains('unread'));
       assert.isTrue(secondThreadNode.classList.contains('unread'));
+      sinon.assert.calledWith(ThreadListUI.markReadUnread, [5, 6], false);
     });
   });
 
@@ -879,9 +883,9 @@ suite('thread_list_ui', function() {
             assert.isTrue(Drafts.byThreadId(id).length === 0);
           });
 
-          assert.isNotNull(document.getElementById('thread-1'));
-          assert.isNotNull(document.getElementById('thread-2'));
-          assert.isNotNull(document.getElementById('thread-3'));
+          assert.isNull(document.getElementById('thread-1'));
+          assert.isNull(document.getElementById('thread-2'));
+          assert.isNull(document.getElementById('thread-3'));
           assert.isNull(document.getElementById('thread-100'));
           assert.isNull(document.getElementById('thread-200'));
 
