@@ -425,8 +425,8 @@ var ThreadListUI = {
       WaitingScreen.show();
 
       threadIdsToDelete = selected.reduce(function(list, value) {
-      // Coerce the threadId back to a number MobileMessageFilter and all
-      // other platform APIs expect this value to be a number.
+        // Coerce the threadId back to a number MobileMessageFilter and all
+        // other platform APIs expect this value to be a number.
         var threadId = +value;
         var isDraft = typeof Threads.get(threadId) === 'undefined';
 
@@ -439,7 +439,7 @@ var ThreadListUI = {
         }, []);
 
       ThreadListUI.deleteThreadDraftUI(draftIdsToDelete, threadIdsToDelete);
-		}
+    }
 
     return Utils.confirm(
       {
